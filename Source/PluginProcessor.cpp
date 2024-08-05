@@ -183,6 +183,33 @@ void VSTAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
     // whose contents will have been created by the getStateInformation() call.
 }
 
+juce::AudioProcessorValueTreeState::ParameterLayout VSTAudioProcessor::createParameterLayout(){
+// 3 EQ bands - Low, High, and Peak
+// Controllable Frequency/Slope, Gain, and Quality
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    
+    layout.add(std::make_unique<juce::AudioParameterFloat>("LowCut Freq",
+                                                           "LowCut Freq",
+                                                           juce::NormalisableRange<float>(20.f,20000.f,1.f,1.f),
+                                                           20.f));
+    
+    layout.add(std::make_unique<juce::AudioParameterFloat>("HighCut Freq",
+                                                           "HighCut Freq",
+                                                           juce::NormalisableRange<float>(20.f,20000.f,1.f,1.f),
+                                                           20000.f));
+    
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Peak Freq",
+                                                           "Peak Freq",
+                                                           juce::NormalisableRange<float>(20.f,20000.f,1.f,1.f),
+                                                           750.f));
+    
+//    layout.add(std::make_unique<juce::AudioParameterFloat>("LowCut Freq",
+//                                                           "LowCut Freq",
+//                                                           juce::NormalisableRange<float>(20.f,20000.f,1.f,1.f),
+//                                                           20.f));
+    return layout;
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

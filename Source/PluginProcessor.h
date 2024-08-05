@@ -1,4 +1,4 @@
-/*
+ /*
   ==============================================================================
 
     This file contains the basic framework code for a JUCE plugin processor.
@@ -52,7 +52,11 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
+// JUCE uses an object called AudioProcessorValueTreeState to sync the GUI and the parameters in the code
+    
+// Can be kept static since doesn't use member variables (is the same no matter how many instances)
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    juce::AudioProcessorValueTreeState apvts {*this,nullptr,"Parameters",createParameterLayout()};
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VSTAudioProcessor)
