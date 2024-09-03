@@ -58,6 +58,18 @@ public:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState apvts {*this,nullptr,"Parameters",createParameterLayout()};
 private:
+    // each filter has 12db we want 48db so we need to use a processor chain of 4 filters.
+    using Filter=juce::dsp::IIR::Filter<float>;
+    
+    using CutFilter=juce::dsp::ProcessorChain<Filter,Filter,Filter,Filter>;
+    
+    
+    // LowCut, Parametric, HighCut - we need two of these for stereo processing
+    using MonoChain=juce::dsp::ProcessorChain<CutFilter,Filter,CutFilter>;
+    
+    MonoChain leftChain,rightChain;
+    
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VSTAudioProcessor)
 };
